@@ -31,7 +31,7 @@ function App() {
         onBack={closeCheckout}
         whatsappNumber="+258 83 474 5655"
         productName="Fórmula de Transformação Corporal"
-        priceLabel="249 MZN (de 599 MZN) — promoção limitada para as 10 primeiras alunas"
+        priceLabel="249 MZN"
         emolaNumberLabel="866678519"
         emolaAccountName="REZIA ISAURA MACHELE"
       />

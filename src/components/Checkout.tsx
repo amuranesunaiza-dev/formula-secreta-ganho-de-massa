@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowLeft, Copy, CheckCircle2, Upload, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Copy, CheckCircle2, MessageCircle } from 'lucide-react';
 import checkoutCover from '../assets/checkout-cover.png?url';
 
 type CheckoutProps = {
@@ -35,9 +35,6 @@ export default function Checkout({
 }: CheckoutProps) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [transactionId, setTransactionId] = useState('');
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
 
   const waText = useMemo(() => {
@@ -46,14 +43,12 @@ export default function Checkout({
       '',
       `Nome: ${name || '-'}`,
       `Telefone: ${phone || '-'}`,
-      `Email: ${email || '-'}`,
       `Valor: ${priceLabel}`,
-      `ID/Referência eMola: ${transactionId || '-'}`,
       '',
-      'Vou enviar o comprovativo em anexo nesta conversa.',
+      'Vou enviar o comprovativo nesta conversa.',
     ];
     return lines.join('\n');
-  }, [email, name, phone, priceLabel, productName, transactionId]);
+  }, [name, phone, priceLabel, productName]);
 
   const waLink = useMemo(() => buildWaLink(whatsappNumber, waText), [whatsappNumber, waText]);
 
@@ -180,7 +175,7 @@ export default function Checkout({
                   <p className="font-semibold text-purple-200">Depois do pagamento:</p>
                   <ol className="list-decimal pl-5 mt-2 space-y-1">
                     <li>Guarde o comprovativo (print ou PDF).</li>
-                    <li>Preencha seus dados abaixo (opcional, mas ajuda na validação).</li>
+                    <li>Preencha seus dados abaixo.</li>
                     <li>Clique em “Enviar comprovativo” para abrir o WhatsApp e anexar o comprovativo.</li>
                   </ol>
                 </div>
@@ -190,9 +185,6 @@ export default function Checkout({
             <div className="space-y-6">
               <div className="p-8 rounded-3xl bg-gradient-to-br from-purple-950/40 to-violet-950/40 border border-purple-500/20">
                 <h2 className="text-xl font-bold text-white">Seus dados</h2>
-                <p className="text-purple-100/70 text-sm mt-1">
-                  Use os mesmos dados que você usou no pagamento (se possível).
-                </p>
 
                 <div className="mt-6 grid gap-4">
                   <label className="grid gap-2">
@@ -215,44 +207,6 @@ export default function Checkout({
                     />
                   </label>
 
-                  <label className="grid gap-2">
-                    <span className="text-sm text-purple-200/80">Email (opcional)</span>
-                    <input
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-black/40 border border-purple-500/20 text-white placeholder:text-purple-200/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
-                      placeholder="voce@email.com"
-                      type="email"
-                    />
-                  </label>
-
-                  <label className="grid gap-2">
-                    <span className="text-sm text-purple-200/80">ID/Referência da transação eMola (opcional)</span>
-                    <input
-                      value={transactionId}
-                      onChange={(e) => setTransactionId(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-black/40 border border-purple-500/20 text-white placeholder:text-purple-200/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
-                      placeholder="Ex: 123456789"
-                    />
-                  </label>
-
-                  <label className="grid gap-2">
-                    <span className="text-sm text-purple-200/80">Comprovativo (para você anexar no WhatsApp)</span>
-                    <div className="flex items-center gap-3">
-                      <input
-                        onChange={(e) => setReceiptFile(e.target.files?.[0] ?? null)}
-                        className="w-full px-4 py-3 rounded-2xl bg-black/40 border border-purple-500/20 text-purple-100 file:mr-4 file:rounded-xl file:border-0 file:bg-purple-600 file:px-4 file:py-2 file:font-semibold file:text-white hover:file:bg-purple-500"
-                        type="file"
-                        accept="image/*,application/pdf"
-                      />
-                    </div>
-                    {receiptFile && (
-                      <p className="text-xs text-purple-200/70">
-                        Selecionado: <span className="text-purple-200 font-semibold">{receiptFile.name}</span>
-                      </p>
-                    )}
-                  </label>
-
                   <a
                     href={waLink}
                     target="_blank"
@@ -262,17 +216,6 @@ export default function Checkout({
                     <MessageCircle className="w-6 h-6" />
                     Enviar comprovativo no WhatsApp
                   </a>
-
-                  <div className="p-4 rounded-2xl bg-black/30 border border-purple-500/20 text-sm text-purple-100/70 leading-relaxed">
-                    <p className="font-semibold text-purple-200 inline-flex items-center gap-2">
-                      <Upload className="w-4 h-4" />
-                      Importante
-                    </p>
-                    <p className="mt-1">
-                      O WhatsApp não permite anexar o arquivo automaticamente pelo link. Ao abrir a conversa,
-                      anexe o comprovativo manualmente (print/PDF).
-                    </p>
-                  </div>
                 </div>
               </div>
 
